@@ -40,20 +40,29 @@ export default {
       humidity: '97%',
       wind: '4mph SW',
       pollen: 36,
-       forecasts: [
-        {'date': 'Monday', 'icon': 'cloud', 'low-temp': 28, 'high-temp': 29},
-        {'date': 'Tuesday', 'icon': 'sun', 'low-temp': 26, 'high-temp': 27},
-        {'date': 'Wednesday', 'icon': 'sun-cloud', 'low-temp': 25, 'high-temp': 27},
-        {'date': 'Thursday', 'icon': 'raining', 'low-temp': 26, 'high-temp': 29},
-        {'date': 'Friday', 'icon': 'cloud', 'low-temp': 28, 'high-temp': 30},
-        {'date': 'Saturday', 'icon': 'sun', 'low-temp': 30, 'high-temp': 32},
-        {'date': 'Sunday', 'icon': 'thunder-storms', 'low-temp': 30, 'high-temp': 34}
-       ]
+      forecasts: []
     }
   },
-
+  methods: {
+    fetchWeather: function () {
+      this.$http.get('http://localhost:3000/weather').then((response) => {
+        this.connecting = false
+        console.log(response.data)
+        this.forecasts = response.data
+      }, (response) => {
+        this.connecting = false
+        this.showConnectionError()
+        this.authorized = false
+      })
+    },
+    showConnectionError: function () {
+      // TOAST : toastjs
+    }
+  },
+  created: function () {
+    this.fetchWeather()
+  }
 }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
